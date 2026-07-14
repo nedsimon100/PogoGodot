@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://c683ti81lb0qc"]
+
+[ext_resource type="Script" uid="uid://bvudrq6hd0s74" path="res://Scripts/PlayerController.gd" id="1_8wf5m"]
+[ext_resource type="Texture2D" uid="uid://kmdkolh0mvp7" path="res://Assets/Sprites/Player/dummy.png" id="2_ywuut"]
+[ext_resource type="Texture2D" uid="uid://lg8n2tnj5ir3" path="res://Assets/Sprites/Player/StunSpriteSheet.png" id="3_eri3q"]
+[ext_resource type="Script" uid="uid://dyj3kpbb33gs1" path="res://Scripts/HeadScript.gd" id="4_p8iar"]
+[ext_resource type="AudioStream" uid="uid://1a6lqvwcfoit" path="res://Assets/Sounds/SFX/Bounce.wav" id="5_r4csm"]
+[ext_resource type="AudioStream" uid="uid://byvoft25fafrt" path="res://Assets/Sounds/SFX/oof.mp3" id="6_6srnc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eyj08"]
+size = Vector2(2, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxr5p"]
+atlas = ExtResource("3_eri3q")
+region = Rect2(0, 0, 150, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdg3f"]
+atlas = ExtResource("3_eri3q")
+region = Rect2(150, 0, 150, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtqjt"]
+atlas = ExtResource("3_eri3q")
+region = Rect2(300, 0, 150, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ncpa"]
+atlas = ExtResource("3_eri3q")
+region = Rect2(450, 0, 150, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cxr5p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxr5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdg3f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtqjt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ncpa")
+}],
+"loop": 1,
+"name": &"Concuss",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_eyj08"]
+radius = 6.0
+
+[sub_resource type="Animation" id="Animation_e80uo"]
+resource_name = "Bounce"
+length = 1.03
+step = 0.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23999998, 0.65000004, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.6), Vector2(1, 1.2), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BounceSound:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_cxr5p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BounceSound:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cxr5p"]
+_data = {
+&"Bounce": SubResource("Animation_e80uo"),
+&"RESET": SubResource("Animation_cxr5p")
+}
+
+[node name="RigidBody2D" type="RigidBody2D" unique_id=1116273496]
+angular_damp = 100.0
+script = ExtResource("1_8wf5m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=699143410]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_eyj08")
+
+[node name="PlayerSprite" type="Sprite2D" parent="." unique_id=93585222]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_ywuut")
+
+[node name="ConcussTimer" type="Timer" parent="." unique_id=1143043275]
+wait_time = 4.0
+ignore_time_scale = true
+
+[node name="ConcussAnim" type="AnimatedSprite2D" parent="." unique_id=961975130]
+visible = false
+position = Vector2(0, -18.999998)
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_cxr5p")
+animation = &"Concuss"
+frame_progress = 0.06273082
+
+[node name="Head" type="Area2D" parent="." unique_id=844424093]
+script = ExtResource("4_p8iar")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Head" unique_id=978061149]
+position = Vector2(0, -7.9999995)
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("CircleShape2D_eyj08")
+
+[node name="BounceAnim" type="AnimationPlayer" parent="." unique_id=1947199256]
+deterministic = true
+libraries/ = SubResource("AnimationLibrary_cxr5p")
+speed_scale = 3.0
+
+[node name="BounceSound" type="AudioStreamPlayer2D" parent="." unique_id=678744096]
+stream = ExtResource("5_r4csm")
+
+[node name="ConcussSound" type="AudioStreamPlayer2D" parent="." unique_id=762078215]
+stream = ExtResource("6_6srnc")
+
+[node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=2063069141]
+current = true
