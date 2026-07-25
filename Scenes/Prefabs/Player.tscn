@@ -6,9 +6,13 @@
 [ext_resource type="Script" uid="uid://dyj3kpbb33gs1" path="res://Scripts/HeadScript.gd" id="4_p8iar"]
 [ext_resource type="AudioStream" uid="uid://1a6lqvwcfoit" path="res://Assets/Sounds/SFX/Bounce.wav" id="5_r4csm"]
 [ext_resource type="AudioStream" uid="uid://byvoft25fafrt" path="res://Assets/Sounds/SFX/oof.mp3" id="6_6srnc"]
+[ext_resource type="Script" uid="uid://hq8x0673vbmt" path="res://Scripts/PogoTrail.gd" id="7_ywuut"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_eyj08"]
-size = Vector2(2, 16)
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8wf5m"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8wf5m"]
+radius = 2.0
+height = 26.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cxr5p"]
 atlas = ExtResource("3_eri3q")
@@ -47,7 +51,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_eyj08"]
-radius = 6.0
+radius = 5.0
 
 [sub_resource type="Animation" id="Animation_e80uo"]
 resource_name = "Bounce"
@@ -56,22 +60,10 @@ step = 0.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 2
+tracks/0/path = NodePath("BounceSound:playing")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.23999998, 0.65000004, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1, 0.6), Vector2(1, 1.2), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("BounceSound:playing")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -83,22 +75,10 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
+tracks/0/path = NodePath("BounceSound:playing")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("BounceSound:playing")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -111,20 +91,28 @@ _data = {
 &"RESET": SubResource("Animation_cxr5p")
 }
 
-[node name="RigidBody2D" type="RigidBody2D" unique_id=1116273496]
-angular_damp = 100.0
+[sub_resource type="Curve" id="Curve_eri3q"]
+_data = [Vector2(0, 0.14935064), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Player" type="RigidBody2D" unique_id=1116273496]
+physics_interpolation_mode = 1
+physics_material_override = SubResource("PhysicsMaterial_8wf5m")
+gravity_scale = 0.0
+lock_rotation = true
+custom_integrator = true
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 5
+angular_damp_mode = 1
 script = ExtResource("1_8wf5m")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=699143410]
-position = Vector2(0, 7)
-shape = SubResource("RectangleShape2D_eyj08")
-
-[node name="PlayerSprite" type="Sprite2D" parent="." unique_id=93585222]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_ywuut")
+[node name="PogoCollider" type="CollisionShape2D" parent="." unique_id=1868611797]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_8wf5m")
 
 [node name="ConcussTimer" type="Timer" parent="." unique_id=1143043275]
-wait_time = 4.0
+wait_time = 5.0
 ignore_time_scale = true
 
 [node name="ConcussAnim" type="AnimatedSprite2D" parent="." unique_id=961975130]
@@ -136,12 +124,17 @@ animation = &"Concuss"
 frame_progress = 0.06273082
 
 [node name="Head" type="Area2D" parent="." unique_id=844424093]
+collision_layer = 128
+collision_mask = 128
 script = ExtResource("4_p8iar")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Head" unique_id=978061149]
-position = Vector2(0, -7.9999995)
+position = Vector2(0, -9)
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CircleShape2D_eyj08")
+
+[node name="ConcussSound" type="AudioStreamPlayer2D" parent="Head" unique_id=762078215]
+stream = ExtResource("6_6srnc")
 
 [node name="BounceAnim" type="AnimationPlayer" parent="." unique_id=1947199256]
 deterministic = true
@@ -151,8 +144,27 @@ speed_scale = 3.0
 [node name="BounceSound" type="AudioStreamPlayer2D" parent="." unique_id=678744096]
 stream = ExtResource("5_r4csm")
 
-[node name="ConcussSound" type="AudioStreamPlayer2D" parent="." unique_id=762078215]
-stream = ExtResource("6_6srnc")
-
 [node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=2063069141]
 current = true
+
+[node name="PogoTip" type="Node2D" parent="." unique_id=1808409847]
+show_behind_parent = true
+z_index = -1
+z_as_relative = false
+position = Vector2(0, 16)
+
+[node name="PogoTrail" type="Line2D" parent="PogoTip" unique_id=802000516 node_paths=PackedStringArray("target")]
+show_behind_parent = true
+points = PackedVector2Array(0, 0)
+width_curve = SubResource("Curve_eri3q")
+default_color = Color(1, 0.56078434, 0.078431375, 1)
+joint_mode = 2
+begin_cap_mode = 2
+round_precision = 1
+script = ExtResource("7_ywuut")
+target = NodePath("..")
+max_points = 30
+pointsPerSecond = 10.0
+
+[node name="PlayerSprite" type="Sprite2D" parent="." unique_id=594876716]
+texture = ExtResource("2_ywuut")

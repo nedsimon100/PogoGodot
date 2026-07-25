@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bvc2lyo8s6pmc"]
+
+[ext_resource type="Script" uid="uid://b3ietqphsmvmo" path="res://Scripts/CameraController.gd" id="1_pabi2"]
+[ext_resource type="PackedScene" uid="uid://c683ti81lb0qc" path="res://Scenes/Prefabs/Player.tscn" id="2_ebdgj"]
+
+[node name="Char" type="Node2D" unique_id=1654707949]
+script = ExtResource("1_pabi2")
+
+[node name="Camera" type="Node2D" parent="." unique_id=1097630568]
+
+[node name="Camera2D" type="Camera2D" parent="Camera" unique_id=1067610966]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+drag_left_margin = 0.0
+drag_top_margin = 0.0
+drag_right_margin = 0.0
+drag_bottom_margin = 0.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="Player" parent="." unique_id=1116273496 instance=ExtResource("2_ebdgj")]
