@@ -13,7 +13,7 @@ var colliding : bool = false
 var concussed : bool = false
 
 var recovTime : float = 1
-
+var startPos : Transform2D
 var prevPos : Vector2 = Vector2.INF
 
 @onready var pogoTip : Node2D = $PogoTip 
@@ -22,9 +22,11 @@ var prevPos : Vector2 = Vector2.INF
 @onready var ConcussionAnimation : AnimatedSprite2D = $ConcussAnim
 @onready var BounceAnimation : AnimationPlayer = $BounceAnim
 @onready var BounceSnd : AudioStreamPlayer2D = $BounceSound
+@onready var inputs : Node = $PlayerControl
 
 func _ready() -> void:
 	can_sleep = false
+	startPos=transform
 
 func Concuss() -> void:
 	concussed = true
@@ -40,7 +42,8 @@ func Concuss() -> void:
 	ConcussionAnimation.stop()
 	ConcussionAnimation.visible = false
 	ConcussionTime.stop()
-	
+
+
 
 var lastVel : Vector2
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
@@ -48,13 +51,12 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	if concussed:
 		angular_damp = 10-(((ConcussionTime.time_left-recovTime)/ConcussionTime.wait_time)*10)
 	# Rotate
-	var turn: float = Input.get_axis("rotateLeft", "rotateRight")
-	var spin: float = turn-((ConcussionTime.time_left/ConcussionTime.wait_time)*turn)
+	var spin: float = inputs.turn-((ConcussionTime.time_left/ConcussionTime.wait_time)*inputs.turn)
 	state.transform = state.transform.rotated_local(spin * rotateSpeed * state.step)
 	
 	var currGravity : float
 	# Gravity
-	if Input.is_action_pressed("Gravity"):
+	if inputs.gravity:
 		currGravity = baseGravity*gravityMult
 	else: 
 		currGravity = baseGravity
@@ -94,3 +96,6 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		colliding = false
 		state.linear_velocity += Vector2(0, 1) * currGravity * state.step
 		lastVel = state.linear_velocity
+
+func resetTransform() -> void:
+	transform = startPos

@@ -15,10 +15,20 @@ run/main_scene="uid://b1pu5mq7630sy"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+EventBus="*uid://wlrhulrj8dhl"
+ScoreManager="*uid://dqxvrmokc32y8"
+ProfileManager="*uid://d027hqnotvi07"
+GamePlayManager="*uid://bckcg76c24pmx"
+
 [display]
 
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=2
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_height"
 
 [input]
 
@@ -51,3 +61,4 @@ textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.19076231, 0.19076234, 0.19076231, 1)

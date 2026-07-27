@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://djht6wql0seb2"]
+
+[ext_resource type="Script" uid="uid://lwqo7tjbhjqs" path="res://Scenes/Prefabs/end_trigger.gd" id="1_8mmds"]
+[ext_resource type="Texture2D" uid="uid://df0w3n0obnlyb" path="res://Assets/Sprites/Objects/EndGoal.png" id="1_ybsik"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_twtwk"]
+radius = 33.24154
+
+[node name="Area2D" type="Area2D" unique_id=1079786637]
+collision_layer = 129
+collision_mask = 129
+script = ExtResource("1_8mmds")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1383620954]
+texture = ExtResource("1_ybsik")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1965866189]
+shape = SubResource("CircleShape2D_twtwk")

@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://c683ti81lb0qc"]
 
-[ext_resource type="Script" uid="uid://bvudrq6hd0s74" path="res://Scripts/PlayerController.gd" id="1_8wf5m"]
+[ext_resource type="Script" uid="uid://bvudrq6hd0s74" path="res://Scripts/Player/PlayerController.gd" id="1_8wf5m"]
 [ext_resource type="Texture2D" uid="uid://kmdkolh0mvp7" path="res://Assets/Sprites/Player/dummy.png" id="2_ywuut"]
 [ext_resource type="Texture2D" uid="uid://lg8n2tnj5ir3" path="res://Assets/Sprites/Player/StunSpriteSheet.png" id="3_eri3q"]
-[ext_resource type="Script" uid="uid://dyj3kpbb33gs1" path="res://Scripts/HeadScript.gd" id="4_p8iar"]
+[ext_resource type="Script" uid="uid://dyj3kpbb33gs1" path="res://Scripts/Player/HeadScript.gd" id="4_p8iar"]
 [ext_resource type="AudioStream" uid="uid://1a6lqvwcfoit" path="res://Assets/Sounds/SFX/Bounce.wav" id="5_r4csm"]
 [ext_resource type="AudioStream" uid="uid://byvoft25fafrt" path="res://Assets/Sounds/SFX/oof.mp3" id="6_6srnc"]
-[ext_resource type="Script" uid="uid://hq8x0673vbmt" path="res://Scripts/PogoTrail.gd" id="7_ywuut"]
+[ext_resource type="Script" uid="uid://hq8x0673vbmt" path="res://Scripts/Player/PogoTrail.gd" id="7_ywuut"]
+[ext_resource type="Script" uid="uid://2hyd0n4yp1fs" path="res://Scenes/Prefabs/PlayerInputs.gd" id="8_eri3q"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8wf5m"]
 
@@ -155,6 +156,8 @@ position = Vector2(0, 16)
 
 [node name="PogoTrail" type="Line2D" parent="PogoTip" unique_id=802000516 node_paths=PackedStringArray("target")]
 show_behind_parent = true
+z_index = -5
+z_as_relative = false
 points = PackedVector2Array(0, 0)
 width_curve = SubResource("Curve_eri3q")
 default_color = Color(1, 0.56078434, 0.078431375, 1)
@@ -167,4 +170,8 @@ max_points = 30
 pointsPerSecond = 10.0
 
 [node name="PlayerSprite" type="Sprite2D" parent="." unique_id=594876716]
+z_index = 4
 texture = ExtResource("2_ywuut")
+
+[node name="PlayerControl" type="Node" parent="." unique_id=578363772]
+script = ExtResource("8_eri3q")

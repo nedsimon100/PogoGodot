@@ -3,13 +3,17 @@
 [ext_resource type="Script" uid="uid://b3ietqphsmvmo" path="res://Scripts/CameraController.gd" id="1_pabi2"]
 [ext_resource type="PackedScene" uid="uid://c683ti81lb0qc" path="res://Scenes/Prefabs/Player.tscn" id="2_ebdgj"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pabi2"]
+bg_color = Color(0.15127608, 0.15127608, 0.15127605, 1)
+
 [node name="Char" type="Node2D" unique_id=1654707949]
 script = ExtResource("1_pabi2")
 
 [node name="Camera" type="Node2D" parent="." unique_id=1097630568]
 
 [node name="Camera2D" type="Camera2D" parent="Camera" unique_id=1067610966]
-zoom = Vector2(2, 2)
+zoom = Vector2(3, 3)
+limit_smoothed = true
 position_smoothing_enabled = true
 drag_left_margin = 0.0
 drag_top_margin = 0.0
@@ -17,5 +21,70 @@ drag_right_margin = 0.0
 drag_bottom_margin = 0.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
+
+[node name="BackgroundUI" type="CanvasLayer" parent="Camera" unique_id=50054536]
+layer = -1
+
+[node name="Control" type="Control" parent="Camera/BackgroundUI" unique_id=314087338]
+z_as_relative = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TimeTxt" type="RichTextLabel" parent="Camera/BackgroundUI/Control" unique_id=406651571]
+z_index = 3
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 890.0
+offset_bottom = -123.0
+grow_vertical = 2
+theme_override_colors/default_color = Color(0.6254933, 0.19789597, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+text = "00"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="Camera/BackgroundUI/Control" unique_id=379195072]
+visible = false
+show_behind_parent = true
+light_mask = 513
+visibility_layer = 513
+z_index = -4
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pabi2")
+
+[node name="CurrFloorTxt" type="RichTextLabel" parent="Camera/BackgroundUI/Control" unique_id=1139504675]
+z_index = 3
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_bottom = 82.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0.6254933, 0.19789597, 0, 1)
+theme_override_font_sizes/normal_font_size = 1000
+text = "00"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerLayerUI" type="CanvasLayer" parent="Camera" unique_id=525606632]
+layer = 0
 
 [node name="Player" parent="." unique_id=1116273496 instance=ExtResource("2_ebdgj")]
