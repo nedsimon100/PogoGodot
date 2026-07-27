@@ -23,7 +23,9 @@ var prevPos : Vector2 = Vector2.INF
 @onready var BounceAnimation : AnimationPlayer = $BounceAnim
 @onready var BounceSnd : AudioStreamPlayer2D = $BounceSound
 @onready var inputs : Node = $PlayerControl
-
+var ConcussionFrames : int = 300
+var ConcussionFramesRemaining : int = 0
+var recoverFrames : int = 45
 func _ready() -> void:
 	can_sleep = false
 	startPos=transform
@@ -32,26 +34,36 @@ func Concuss() -> void:
 	concussed = true
 	custom_integrator = false
 	set_deferred("lock_rotation", false)
-	ConcussionTime.start()
+	#ConcussionTime.start()
+	ConcussionFramesRemaining = ConcussionFrames
 	ConcussionAnimation.visible = true
 	ConcussionAnimation.play("Concuss")
-	await ConcussionTime.timeout
-	concussed = false
-	custom_integrator = true
-	set_deferred("lock_rotation", true)
-	ConcussionAnimation.stop()
-	ConcussionAnimation.visible = false
-	ConcussionTime.stop()
+	#await ConcussionTime.timeout
+	#concussed = false
+	#custom_integrator = true
+#	set_deferred("lock_rotation", true)
+	#ConcussionAnimation.stop()
+#	ConcussionAnimation.visible = false
+	#ConcussionTime.stop()
 
 
 
 var lastVel : Vector2
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
-	
+	inputs.GetInputs()
+	if ConcussionFramesRemaining == 0 and concussed:
+		concussed = false
+		custom_integrator = true
+		set_deferred("lock_rotation", true)
+		ConcussionAnimation.stop()
+		ConcussionAnimation.visible = false
 	if concussed:
-		angular_damp = 10-(((ConcussionTime.time_left-recovTime)/ConcussionTime.wait_time)*10)
+		#angular_damp = 10-(((ConcussionTime.time_left-recovTime)/ConcussionTime.wait_time)*10)
+		ConcussionFramesRemaining -= 1
+		angular_damp = 10-((float(ConcussionFramesRemaining-recoverFrames)/ConcussionFrames)*10)
 	# Rotate
-	var spin: float = inputs.turn-((ConcussionTime.time_left/ConcussionTime.wait_time)*inputs.turn)
+	#var spin: float = inputs.turn-((ConcussionTime.time_left/ConcussionTime.wait_time)*inputs.turn)
+	var spin: float = inputs.turn - (float(ConcussionFramesRemaining/ConcussionFrames)*inputs.turn)
 	state.transform = state.transform.rotated_local(spin * rotateSpeed * state.step)
 	
 	var currGravity : float

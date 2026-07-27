@@ -6,8 +6,7 @@ extends Node
 @onready var TimeTxt := $Camera/BackgroundUI/Control/TimeTxt
 var roomHeight : float = 336
 var startTime : int
-func _ready() -> void:
-	GamePlayManager.StartGame()
+
 
 func _process(delta: float) -> void:
 	var currfloor : int = round((player.global_position.y)/(roomHeight))*roomHeight
